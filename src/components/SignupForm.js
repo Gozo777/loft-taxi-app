@@ -40,6 +40,7 @@ class SignupForm extends Component {
       const { firstName, lastName, email, password, phone } = this.state;
     return (
       <>
+        <p>Sign up page</p>
          <ul>
           <form onSubmit={this.handleSubmit}>
           <li>

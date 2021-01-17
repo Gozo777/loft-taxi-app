@@ -31,6 +31,7 @@ class LoginForm extends Component {
     const { firstName, lastName } = this.state;
     return (
       <>
+        <p>Login page</p>
         <ul>
       <form onSubmit={this.handleSubmit}>
           <label>

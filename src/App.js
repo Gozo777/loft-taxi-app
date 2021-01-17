@@ -1,15 +1,15 @@
 import React, { Component } from 'react';
 import Header from './Header';
-import LoginPage from './components/LoginPage';
-import SignupPage from './components/SignupPage';
+import LoginForm from './components/LoginForm';
+import SignupForm from './components/SignupForm';
 import Map from './components/Map';
 import Profile from './components/Profile';
 
 const pages = {
-  login: <LoginPage />,
+  login: <LoginForm/>,
   profile: <Profile />,
   map: <Map />,
-  signup: <SignupPage/>
+  signup: <SignupForm/>
 }
 
 class App extends Component {
