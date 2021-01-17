@@ -1,7 +1,20 @@
-import React from 'react';
+import React, { Component } from 'react';
+import Map from './Map';
 
-class SignupForm extends React.Component {
+const pages = {
+  map: <Map />,
+}
+
+class SignupForm extends Component {
+  
   state = { firstName: "", lastName: "", email: "", password: "", phone: null };
+  state = {
+    currentPage: ""
+  };
+
+  navigateTo = (page) => {
+    this.setState({ currentPage: page });
+  }
 
   handleSubmit = event => {
       event.preventDefault();
@@ -23,14 +36,13 @@ class SignupForm extends React.Component {
     this.setState({ phone: event.target.value });
   };
 
-  redirect = event => {
-    document.location.href="map"
- }
-
   render() {
       const { firstName, lastName, email, password, phone } = this.state;
     return (
-        <form onSubmit={this.handleSubmit}>
+      <>
+         <ul>
+          <form onSubmit={this.handleSubmit}>
+          <li>
           <label>
             First Name:
             <input
@@ -39,7 +51,9 @@ class SignupForm extends React.Component {
               value={firstName}
               onChange={this.handleChange}
             />
-          </label>
+              </label>
+            </li>
+            <li>
           <label>
             Last Name:
             <input
@@ -48,7 +62,9 @@ class SignupForm extends React.Component {
               value={lastName}
               onChange={this.handleChange}
             />
-          </label>
+              </label>
+            </li>
+            <li>
           <label>
             Email:
             <input
@@ -57,7 +73,9 @@ class SignupForm extends React.Component {
               value={email}
               onChange={this.handleEmailChange}
             />
-          </label>
+              </label>
+            </li>
+            <li>
           <label>
             Password:
             <input
@@ -66,7 +84,9 @@ class SignupForm extends React.Component {
               value={password}
               onChange={this.handlePasswordChange}
             />
-          </label>
+              </label>
+            </li>
+            <li>
           <label>
             Phone:
             <input
@@ -75,9 +95,21 @@ class SignupForm extends React.Component {
               value={phone}
               onChange={this.handlePhoneChange}
             />
-          </label>
-          <input type="submit" value="Submit" onClick={this.redirect}/>
-        </form>
+              </label>
+              </li>
+        <button onClick={() => {
+                  this.navigateTo("map");
+                }} >
+                  Submit
+                </button>
+          </form>
+          <main>
+      <section>
+        {pages[this.state.currentPage]}
+      </section>
+    </main>
+          </ul>
+        </>
       );
   }
 }

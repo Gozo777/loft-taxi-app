@@ -1,7 +1,21 @@
 import React, { Component } from 'react';
+import Map from './Map';
+
+const pages = {
+  map: <Map />,
+} 
 
 class LoginForm extends Component {
+
   state = { firstName: "", lastName: "" };
+  state = {
+    currentPage: ""
+  }; 
+  
+  navigateTo = (page) => {
+    this.setState({ currentPage: page });
+  }
+
 
   handleSubmit = event => {
       event.preventDefault();
@@ -13,13 +27,11 @@ class LoginForm extends Component {
     this.setState({ [event.target.name]: event.target.value });
   };
 
-  redirect = event => {
-    document.location.href="map"
- }
-
   render() {
     const { firstName, lastName } = this.state;
     return (
+      <>
+        <ul>
       <form onSubmit={this.handleSubmit}>
           <label>
             First Name:
@@ -39,9 +51,20 @@ class LoginForm extends Component {
             onChange={this.handleChange}
             />
         </label>
-        <input type="submit" value="Submit" onClick={this.redirect}/>
-        </form>
-      );
+        <button onClick={() => {
+            this.navigateTo("map");
+          }} >
+                  Submit
+                </button>
+          </form>
+        <main>
+        <section>
+        {pages[this.state.currentPage]}
+      </section>
+          </main>
+          </ul>
+        </>
+    );
   }
 }
 
