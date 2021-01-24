@@ -1,4 +1,5 @@
-import React, { useRef, useEffect, useState, useContext } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
+import { withAuth } from './AuthContext';
 import mapboxgl from 'mapbox-gl';
 import './Map.css';
 
@@ -50,4 +51,4 @@ const Map = () => {
   );
 };
 
-export default Map;
+export default withAuth(Map);

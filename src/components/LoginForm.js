@@ -4,26 +4,22 @@ import { withAuth } from './AuthContext';
 
 export class LoginForm extends Component {
 
-  goToProfile = () => {
-    this.props.navigate("profile")
-  }
-
   authenticate = (event) => {
     event.preventDefault();
     const { email, password } = event.target;
     this.props.login(email.value, password.value);
   }
   
-  navigateTo = (page) => {
-    this.setState({ currentPage: page });
-  }
+  navigateTo = () => {
+      this.setState({ currentPage: "profile" });
+    }
 
   render() {
     return (
       <>
         {this.props.isLoggedIn ? (
           <p>
-            You are logged in <button onClick={this.goToProfile}>go to profile</button>
+            You are logged in <button onClick={this.navigateTo}>go to profile</button>
           </p>
           ) : (
         <ul>
@@ -48,16 +44,6 @@ export class LoginForm extends Component {
         </>
     );
   }
-}
-
-LoginForm.defaultProps = {
-  email: '@',
-  password: 'check'
-}
-
-LoginForm.propTypes = {
-  email: PropTypes.string,
-  password: PropTypes.string,
 }
 
 export default withAuth(LoginForm);

@@ -8,10 +8,10 @@ class AuthProvider extends Component {
   };
 
   login = () => {
-      this.setIsLoggedIn(true)
+    this.setState({ isLoggedIn: true })
   };
   logout = () => {
-    this.setIsLoggedIn(false)
+    this.setState({ isLoggedIn: false })
   };
     
   render() {
@@ -23,9 +23,8 @@ class AuthProvider extends Component {
         {children}
       </Provider>
     );
+  }
 }
-}
-
 
 function withAuth(WrappedComponent) {
   return class extends Component {

@@ -1,18 +1,18 @@
-import React, { useContext } from 'react';
-import { AuthProvider, withAuth } from './AuthContext';
-import LoginForm from './LoginForm';
+import React, {Component} from 'react';
+import { withAuth } from './AuthContext';
 
-export const Profile = () => {
-  const { isLoggedIn } = useContext(AuthProvider);
-  
-  if (!isLoggedIn) return <LoginForm />;
-
-  console.log(isLoggedIn)
-  return (
-    <div>
-      Profile
-    </div>
-  )
+export class Profile extends Component {
+  unathenticate = () => {
+    this.props.logout();
+    this.props.navigate("login");
+  }
+  render() {
+    return (
+      <p>
+        Profile <button onClick={this.unanthenticate}>Log out</button>
+      </p>
+    );
+  }
 }
 
-export default Profile;
+export default withAuth(Profile);

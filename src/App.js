@@ -6,6 +6,12 @@ import Map from './components/Map';
 import Profile from './components/Profile';
 import { withAuth } from './components/AuthContext';
 
+/* import { ErrorBoundary } from './ErrorBoundary';
+import {ComponentThatCanCrash} from './ComponentThatCanCrash'; 
+        <ErrorBoundary>
+               <ComponentThatCanCrash />
+           </ErrorBoundary>*/
+
 const pages = {
   login: <LoginForm/>,
   profile: <Profile/>,
@@ -16,7 +22,7 @@ const pages = {
 class App extends Component {
 
   state = {
-    currentPage: pages.map.id
+    currentPage: "login"
   };
 
   navigateTo = (page) => {
@@ -26,26 +32,18 @@ class App extends Component {
       this.setState({ currentPage: "login" });
     }
   };
-  
-  handleChangePage = (page) => {
-    if (this.props.isLoggedIn) {
-      this.setState({ currentPage: page });
-    } else {
-      this.setState({ currentPage: "login" });
-    }};
-    
 
 render() {
 
   return (
     <>
       <header>
-          <Header handleChangePage={(currentPage) => this.handleChangePage(currentPage)}
+          <Header navigateTo={(currentPage) => this.navigateTo(currentPage)}
           />
           </header>
         <main>
           <section>
-            {pages[this.state.currentPage]}
+            {pages[this.state.currentPage]({navigate: this.navigateTo})}
           </section>
         </main>
         </>
