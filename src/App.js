@@ -4,7 +4,7 @@ import LoginForm from './components/LoginForm';
 import SignupForm from './components/SignupForm';
 import Map from './components/Map';
 import Profile from './components/Profile';
-import { AuthProvider, withAuth } from './components/AuthContext';
+import { withAuth } from './components/AuthContext';
 
 const pages = {
   login: <LoginForm/>,
@@ -16,7 +16,6 @@ const pages = {
 class App extends Component {
 
   state = {
-    isLoggedIn: false,
     currentPage: pages.map.id
   };
 
@@ -27,14 +26,6 @@ class App extends Component {
       this.setState({ currentPage: "login" });
     }
   };
-
-  login = ( email, password ) => {
-  this.setState({ isLoggedIn: true });
-};
-
-logout = () => {
-  this.setState({ isLoggedIn: false});
-};
   
   handleChangePage = (page) => {
     if (this.props.isLoggedIn) {
@@ -45,18 +36,11 @@ logout = () => {
     
 
 render() {
-  const { page, isLoggedIn } = this.state;
 
-    return (
-      <AuthProvider
-        value={{
-          login: this.login,
-          logout: this.logout,
-          isLoggedIn
-        }}
-      >
+  return (
+    <>
       <header>
-          <Header page={page} handleChangePage={(currentPage) => this.handleChangePage(currentPage)}
+          <Header handleChangePage={(currentPage) => this.handleChangePage(currentPage)}
           />
           </header>
         <main>
@@ -64,9 +48,9 @@ render() {
             {pages[this.state.currentPage]}
           </section>
         </main>
-        </AuthProvider>
+        </>
     )
   }
 }
 
-export default App;
+export default withAuth(App);

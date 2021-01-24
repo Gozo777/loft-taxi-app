@@ -1,15 +1,14 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useEffect, useState, useContext } from 'react';
 import mapboxgl from 'mapbox-gl';
 import './Map.css';
-import { AuthProvider, withAuth } from './AuthContext';
+
+
 
 mapboxgl.accessToken =
   'pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4M29iazA2Z2gycXA4N2pmbDZmangifQ.-g_vE53SD2WrJ6tFX7QHmA';
 
 const Map = () => {
-  const { isLoggedIn } = useContext(AuthProvider);
-  
-  if (!isLoggedIn) return <LoginForm />;
+
 
   const mapContainerRef = useRef(null);
 

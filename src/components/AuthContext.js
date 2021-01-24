@@ -35,7 +35,7 @@ function withAuth(WrappedComponent) {
         <AuthConsumer>
           {
             (value) => {
-              return <WrappedComponent {...value} />
+              return <WrappedComponent {...value} {...this.props}/>
             }
           }
         </AuthConsumer>

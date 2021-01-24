@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from "prop-types";
-import { AuthProvider, withAuth } from './AuthContext';
+import { withAuth } from './AuthContext';
 
 export class LoginForm extends Component {
 
@@ -60,7 +60,5 @@ LoginForm.propTypes = {
   password: PropTypes.string,
 }
 
-export const LoginWithAuth = withAuth(LoginForm);
-
-export default LoginForm;
+export default withAuth(LoginForm);
 
