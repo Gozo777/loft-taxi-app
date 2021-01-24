@@ -6,7 +6,7 @@ import Button from '@material-ui/core/Button';
 class Header extends Component {
 
   navigateTo = (page) => {
-    this.props.changePage(page);
+    this.props.handleChangePage(page);
   }
 
   render() {

@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import Map from './Map';
+import PropTypes from "prop-types";
+import { AuthProvider, withAuth } from './AuthContext';
 
 const pages = {
   map: <Map />,
@@ -114,5 +116,23 @@ class SignupForm extends Component {
       );
   }
 }
+
+
+SignupForm.defaultProps = {
+  firstName: 'Tom',
+  lastName: 'Hard',
+  email: '@',
+  password: '',
+  phone: null
+}
+
+SignupForm.propTypes = {
+  firstName: PropTypes.string,
+  lastName: PropTypes.string,
+  email: PropTypes.any.isRequired,
+  password: PropTypes.any.isRequired,
+  phone: PropTypes.number
+}
+  
 
 export default SignupForm;

@@ -1,72 +1,66 @@
 import React, { Component } from 'react';
-import Map from './Map';
+import PropTypes from "prop-types";
+import { AuthProvider, withAuth } from './AuthContext';
 
-const pages = {
-  map: <Map />,
-} 
+export class LoginForm extends Component {
 
-class LoginForm extends Component {
+  goToProfile = () => {
+    this.props.navigate("profile")
+  }
 
-  state = { firstName: "", lastName: "" };
-  state = {
-    currentPage: ""
-  }; 
+  authenticate = (event) => {
+    event.preventDefault();
+    const { email, password } = event.target;
+    this.props.login(email.value, password.value);
+  }
   
   navigateTo = (page) => {
     this.setState({ currentPage: page });
   }
 
-
-  handleSubmit = event => {
-      event.preventDefault();
-       console.log(this.state.firstName);
-      console.log(this.state.lastName);
-  };
-
-  handleChange = event => {
-    this.setState({ [event.target.name]: event.target.value });
-  };
-
   render() {
-    const { firstName, lastName } = this.state;
     return (
       <>
-        <p>Login page</p>
+        {this.props.isLoggedIn ? (
+          <p>
+            You are logged in <button onClick={this.goToProfile}>go to profile</button>
+          </p>
+          ) : (
         <ul>
-      <form onSubmit={this.handleSubmit}>
-          <label>
-            First Name:
+      <form onSubmit={this.authenticate}>
+          <label>Email:</label>
             <input
-              type="text"
-              name="firstName"
-              value={firstName}
-            onChange={this.handleChange}
+              id="email"
+              type="email"
+              name="email"
             />
-          </label>
-          <label>
-            Last Name:
+  
+          <label>Password:</label>
             <input
-              type="text"
-              name="lastName"
-              value={lastName}
-            onChange={this.handleChange}
+              id="password"
+              type="password"
+              name="password"
             />
-        </label>
-        <button onClick={() => {
-            this.navigateTo("map");
-          }} >
-                  Submit
-                </button>
-          </form>
-        <main>
-        <section>
-        {pages[this.state.currentPage]}
-      </section>
-          </main>
-          </ul>
+        <button type="submit">Log in</button>
+              </form>
+              </ul>
+                )}
         </>
     );
   }
 }
 
+LoginForm.defaultProps = {
+  email: '@',
+  password: 'check'
+}
+
+LoginForm.propTypes = {
+  email: PropTypes.string,
+  password: PropTypes.string,
+}
+
+export const LoginWithAuth = withAuth(LoginForm);
+
 export default LoginForm;
+

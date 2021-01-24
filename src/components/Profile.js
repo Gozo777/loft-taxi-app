@@ -1,10 +1,17 @@
-import React from 'react'
+import React, { useContext } from 'react';
+import { AuthProvider, withAuth } from './AuthContext';
+import LoginForm from './LoginForm';
 
 export const Profile = () => {
+  const { isLoggedIn } = useContext(AuthProvider);
+  
+  if (!isLoggedIn) return <LoginForm />;
+
+  console.log(isLoggedIn)
   return (
-    <>
-    <p>Profile page</p>
-    </>
+    <div>
+      Profile
+    </div>
   )
 }
 
