@@ -5,6 +5,7 @@ import SignupForm from './components/SignupForm';
 import Map from './components/Map';
 import Profile from './components/Profile';
 import { withAuth } from './components/AuthContext';
+import PropTypes from "prop-types";
 
 /* import { ErrorBoundary } from './ErrorBoundary';
 import {ComponentThatCanCrash} from './ComponentThatCanCrash'; 
@@ -43,12 +44,16 @@ render() {
           </header>
         <main>
           <section>
-            {pages[this.state.currentPage]({navigate: this.navigateTo})}
+            {pages[this.state.currentPage]}
           </section>
         </main>
         </>
     )
   }
 }
+
+App.propTypes = {
+  isLoggedIn: PropTypes.any
+} 
 
 export default withAuth(App);

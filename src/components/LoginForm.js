@@ -4,23 +4,22 @@ import { withAuth } from './AuthContext';
 
 export class LoginForm extends Component {
 
+  unanthenticate = () => {
+    this.props.logout();
+  }
+
   authenticate = (event) => {
     event.preventDefault();
     const { email, password } = event.target;
     this.props.login(email.value, password.value);
   }
-  
-  navigateTo = () => {
-      this.setState({ currentPage: "profile" });
-    }
 
   render() {
     return (
       <>
         {this.props.isLoggedIn ? (
-          <p>
-            You are logged in <button onClick={this.navigateTo}>go to profile</button>
-          </p>
+          <p>You are logged in 
+            You can log out<button onClick={this.unanthenticate}>Log out</button></p>
           ) : (
         <ul>
       <form onSubmit={this.authenticate}>
@@ -45,6 +44,13 @@ export class LoginForm extends Component {
     );
   }
 }
+
+
+LoginForm.propTypes = {
+  login: PropTypes.func,
+  logout: PropTypes.func,
+  isLoggedIn: PropTypes.any
+} 
 
 export default withAuth(LoginForm);
 

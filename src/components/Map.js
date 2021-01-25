@@ -3,13 +3,10 @@ import { withAuth } from './AuthContext';
 import mapboxgl from 'mapbox-gl';
 import './Map.css';
 
-
-
 mapboxgl.accessToken =
   'pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4M29iazA2Z2gycXA4N2pmbDZmangifQ.-g_vE53SD2WrJ6tFX7QHmA';
 
 const Map = () => {
-
 
   const mapContainerRef = useRef(null);
 
@@ -41,12 +38,12 @@ const Map = () => {
 
   return (
     <div>
-      <div className='sidebarStyle'>
+      <div className='map-wrapper'>
         <div>
           Longitude: {lng} | Latitude: {lat} | Zoom: {zoom}
         </div>
       </div>
-      <div className='map-container' ref={mapContainerRef} />
+      <div className='map' ref={mapContainerRef} />
     </div>
   );
 };
