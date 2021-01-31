@@ -1,24 +1,22 @@
 import React, { Component } from 'react';
 import PropTypes from "prop-types";
-import { withAuth } from './AuthContext';
+import { connect } from 'react-redux';
+import { authenticate } from '../actions/actions';
+import { Link} from 'react-router-dom';
 
 export class LoginForm extends Component {
-
-  unanthenticate = () => {
-    this.props.logout();
-  }
 
   authenticate = (event) => {
     event.preventDefault();
     const { email, password } = event.target;
-    this.props.login(email.value, password.value);
+    this.props.authenticate(email.value, password.value);
   }
 
   render() {
     return (
       <>
         {this.props.isLoggedIn ? (
-          <p>You are logged in 
+          <p>You are logged in <Link to="/profile">Go to profile</Link>
             You can log out<button onClick={this.unanthenticate}>Log out</button></p>
           ) : (
         <ul>
@@ -52,5 +50,8 @@ LoginForm.propTypes = {
   isLoggedIn: PropTypes.any
 } 
 
-export default withAuth(LoginForm);
+export default connect(
+  (state) => ({ isLoggedIn: state.auth.isLoggedIn }),
+  { authenticate }
+)(LoginForm);
 

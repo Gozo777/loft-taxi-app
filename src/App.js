@@ -1,59 +1,42 @@
-import React, { Component } from 'react';
-import Header from './Header';
+import React, { PureComponent } from 'react';
+import { Route, Redirect, Switch } from 'react-router-dom';
 import LoginForm from './components/LoginForm';
 import SignupForm from './components/SignupForm';
 import Map from './components/Map';
 import Profile from './components/Profile';
-import { withAuth } from './components/AuthContext';
-import PropTypes from "prop-types";
+import { PrivateRoute } from './PrivateRoute/PrivateRoute';
+import { connect } from 'react-redux';
 
 /* import { ErrorBoundary } from './ErrorBoundary';
 import {ComponentThatCanCrash} from './ComponentThatCanCrash'; 
         <ErrorBoundary>
                <ComponentThatCanCrash />
-           </ErrorBoundary>*/
+           </ErrorBoundary> */
 
-const pages = {
-  login: <LoginForm/>,
-  profile: <Profile/>,
-  map: <Map/>,
-  signup: <SignupForm/>,
-}
+class App extends PureComponent {
 
-class App extends Component {
-
-  state = {
-    currentPage: "login"
-  };
-
-  navigateTo = (page) => {
-    if (this.props.isLoggedIn) {
-      this.setState({ currentPage: page });
-    } else {
-      this.setState({ currentPage: "login" });
-    }
-  };
-
-render() {
+  render() {
 
   return (
-    <>
-      <header>
-          <Header navigateTo={(currentPage) => this.navigateTo(currentPage)}
-          />
-          </header>
-        <main>
-          <section>
-            {pages[this.state.currentPage]}
-          </section>
-        </main>
-        </>
+  <>
+      <Switch>
+        <Route exact path="/" />
+        <Route path="/signup" component={SignupForm}/>
+        <Route path="/login" component={LoginForm} />
+        <PrivateRoute path="/map" component={Map} />
+        <PrivateRoute path="/profile" component={Profile} />
+        <Redirect to="/login" />
+        </Switch>
+</>
     )
   }
 }
 
+/*
 App.propTypes = {
-  isLoggedIn: PropTypes.any
-} 
+  isLoggedIn: PropTypes.false
+} */
 
-export default withAuth(App);
+export default connect(
+  state => ({ isLoggedIn: state.auth.isLoggedIn })
+)(App);

@@ -1,21 +1,10 @@
 import React, { Component } from 'react';
-import Map from './Map';
-import { withAuth } from './AuthContext';
-
-const pages = {
-  map: <Map />,
-}
+import { Link } from 'react-router-dom';
 
 class SignupForm extends Component {
   
   state = { firstName: "", lastName: "", email: "", password: "", phone: null };
-  state = {
-    currentPage: ""
-  };
 
-  navigateTo = (page) => {
-    this.setState({ currentPage: page });
-  }
 
   handleSubmit = event => {
       event.preventDefault();
@@ -98,22 +87,15 @@ class SignupForm extends Component {
               onChange={this.handlePhoneChange}
             />
               </label>
-              </li>
-        <button onClick={() => {
-                  this.navigateTo("map");
-                }} >
-                  Submit
-                </button>
+            </li>
+            <button>
+            <Link to="/profile">Submit</Link>
+            </button>
           </form>
-          <main>
-      <section>
-        {pages[this.state.currentPage]}
-      </section>
-    </main>
           </ul>
         </>
       );
   }
 } 
 
-export default withAuth(SignupForm);
+export default SignupForm;
