@@ -20,7 +20,7 @@ class App extends PureComponent {
           <Switch>
         <Route path="/login" component={LoginForm} />
         <Route path="/signup" component={SignupForm}/>
-        <PrivateRoute path="/map" component={Map} />
+        <PrivateRoute path="/" component={Map} />
         <PrivateRoute path="/profile" component={Profile} />
         </Switch>
         </BrowserRouter>
@@ -33,5 +33,5 @@ App.propTypes = {
 } */
 
 export default connect(
-  state => ({ isLoggedIn: state.auth.isLoggedIn })
-)(App);
+  null,
+)(App)

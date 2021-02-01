@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import PropTypes from "prop-types";
+import PropTypes, { func } from "prop-types";
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 import { authenticate } from '../actions/actions';
@@ -43,10 +43,14 @@ return (
 
 
 LoginForm.propTypes = {
-  login: PropTypes.func,
-  logout: PropTypes.func,
+  authenticate: func,
   isLoggedIn: PropTypes.bool
 } 
+
+LoginForm.defaultProps = {
+  isLoggedIn: false,
+  authenticate: () => {},
+};
 
 export default connect(
   (state) => ({ isLoggedIn: state.auth.isLoggedIn }),

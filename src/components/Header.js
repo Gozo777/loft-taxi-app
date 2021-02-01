@@ -4,6 +4,7 @@ import Button from "@material-ui/core/Button";
 import { Link } from 'react-router-dom';
 import { connect } from "react-redux";
 import { logOut } from '../actions/actions';
+import { func } from "prop-types";
 
 class Header extends Component {
 
@@ -35,6 +36,16 @@ class Header extends Component {
     )
   }
 }
+
+Header.propTypes = {
+  unauthenticate: func,
+ // isLoggedIn: PropTypes.bool
+} 
+
+Header.defaultProps = {
+ // isLoggedIn: false,
+ unauthenticate: () => {},
+};
 
 export default connect(
   null, 
