@@ -1,14 +1,19 @@
 import axios from 'axios';
+import { failure } from './actions/actions';
+
 //import { accessToken } from 'mapbox-gl';
 
 export const serverLogin = async (email, password) => {
   return axios(
     `https://loft-taxi.glitch.me/auth`, {
+    method: 'POST',
+    headers: { 'content-type': 'application/x-www-form-urlencoded' },
     params: {
       username: email,
       password,
     },
-  }).then((response) => response.data.success);
+  }).then((response) => response.data.success).catch((error) =>
+    failure(error));
 };
 
 export const addBankCard = async (cardNum, expiryDate, cvc, token) => {

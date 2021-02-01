@@ -9,3 +9,4 @@ export const authenticate = createAction(
     password,
   })
 );
+export const failure = createAction('FAILURE');
