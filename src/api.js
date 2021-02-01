@@ -7,7 +7,7 @@ export const serverLogin = async (email, password) => {
   return axios(
     `https://loft-taxi.glitch.me/auth`, {
     method: 'POST',
-    headers: { 'content-type': 'application/x-www-form-urlencoded' },
+    headers: { 'content-Type': 'application/json' },
     params: {
       username: email,
       password,
