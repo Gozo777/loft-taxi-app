@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from "prop-types";
 import { connect } from 'react-redux';
+import { Redirect } from 'react-router-dom';
 import { authenticate } from '../actions/actions';
-import { Link} from 'react-router-dom';
 
 export class LoginForm extends Component {
 
@@ -13,41 +13,39 @@ export class LoginForm extends Component {
   }
 
   render() {
-    return (
+return (
       <>
-        {this.props.isLoggedIn ? (
-          <p>You are logged in <Link to="/profile">Go to profile</Link>
-            You can log out<button onClick={this.unanthenticate}>Log out</button></p>
-          ) : (
-        <ul>
-      <form onSubmit={this.authenticate}>
-          <label>Email:</label>
+    {this.props.isLoggedIn ? (
+      <Redirect to="/map" />
+    ) : (
+        <div>
+          <h2>Войти</h2>
+          <form onSubmit={authenticate}>
+            <label>Email:</label>
             <input
               id="email"
               type="email"
               name="email"
             />
   
-          <label>Password:</label>
+            <label>Password:</label>
             <input
               id="password"
               type="password"
               name="password"
             />
-        <button type="submit">Log in</button>
-              </form>
-              </ul>
-                )}
-        </>
-    );
-  }
-}
+            <button type="submit">Log in</button>
+          </form>
+        </div>
+      )}
+  </>
+)}}
 
 
 LoginForm.propTypes = {
   login: PropTypes.func,
   logout: PropTypes.func,
-  isLoggedIn: PropTypes.any
+  isLoggedIn: PropTypes.bool
 } 
 
 export default connect(

@@ -10,15 +10,12 @@ import {
 import { connect } from 'react-redux'; */
 
 export class Profile extends Component {
-  unauthenticate = () => {
-    this.props.logOut();
 
-}
-
+  /*
   componentDidMount() {
     const { fetchCardRequest } = this.props;
     fetchCardRequest();
-  }
+  } */
   
   render() {
 
@@ -29,8 +26,7 @@ export class Profile extends Component {
     
     return (
       <>
-        <p>Profile <button onClick={this.unauthenticate}>Log out</button>
-        Card: 000</p>
+        <p>profile</p>
       </>
     );
   }

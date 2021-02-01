@@ -1,14 +1,19 @@
 import { authMiddleware } from './authMiddlewares';
-import { authenticate } from './actions';
-import { serverLogin } from '../api';
+import { authenticate, logIn } from '../actions/actions';
+import { serverLogin } from './api';
 import { ExpansionPanelActions, jssPreset } from '@material-ui/core';
 
 jest.mock("./api", () => ({ serverLogin: jest.fn(() => true) }))
 
 describe("authMiddleware", () => {
-  desribe("#AUTHENTICATE", () => {
-    it("authenticates through api", async () => {
-      const dispatch = jest.fn()
+  afterAll(jest.clearAllMocks)
+
+  desribe("#authenticate", () => {
+
+    desribe('with correct credentials', () => {
+      it("authenticates through api", async () => {
+        serverLogin.mockImplementation(async () => true);
+        const dispatch = jest.fn()
       
       await authMiddleware({ dispatch })()(
         authenticate("testlogin", "testpassword")
@@ -18,6 +23,7 @@ describe("authMiddleware", () => {
       expect(dispatch).toBeCalledWith(
         {type: "LOG_IN"}
       )
+    })
     })
   })
 })

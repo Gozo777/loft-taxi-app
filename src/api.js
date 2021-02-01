@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { accessToken } from 'mapbox-gl';
+//import { accessToken } from 'mapbox-gl';
 
 export const serverLogin = async (email, password) => {
   return axios(
