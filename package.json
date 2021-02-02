@@ -10,6 +10,8 @@
     "axios": "^0.21.1",
     "final-form": "^4.20.1",
     "history": "^5.0.0",
+    "langs": "^2.0.0",
+    "loft-taxi-mui-theme": "^1.2.0",
     "mapbox-gl": "^2.0.1",
     "prop-types": "^15.7.2",
     "react": "^17.0.1",

@@ -1,46 +1,37 @@
-import React from "react";
-import App from "./App";
-import { render, fireEvent } from "@testing-library/react";
+import React from 'react';
+import { Router } from 'react-router-dom';
+import { shallow } from 'enzyme';
 import { Provider } from 'react-redux';
-import { Router } from "react-router-dom";
-import { createMemoryHistory } from 'history';
+import App from './App';
+import createStore from './store';
 
-jest.mock('./components/LoginForm', () => ({ LoginForm: () => <div>Login component</div> }))
-jest.mock('./components/SignupForm', () => ({ SignupForm: () => <div>Sign up component</div> }))
-jest.mock('./components/Profile', () => ({ Profile: () => <div>Profile component</div> }))
-jest.mock('./components/Map', () => ({ Map: () => <div>Map component</div> }))
+const store = createStore();
 
-describe("App", () => {
-  it("renders correctly", () => {
-    const mockStore = {
-      getState: () => ({ auth: {isLoggedIn: true} }),
-      subscribe: () => { },
-      dispatch: () => { }
-    }
+describe('render routes', () => {
+  test('render App', () => {
+    const wrapper = shallow(
+      <Provider store={store}>
+        <Router >
+          <App />
+        </Router>
+      </Provider>,
+    );
+    expect(wrapper.find(App)).toHaveLength(1);
+  });
 
-    const history = createMemoryHistory();
+  test('render children', () => {
+    const Child = () => <div>CHILD</div>;
 
-    const { container } = render(
-      <Router history={history}>
-      <Provider store={mockStore}>
-      <App />
-        </Provider>
-        </Router> 
-    
-    )
-    expect(container.innerHTML).toMatch("Login component")
-  })
-
-  describe("when clicked on navigation button", () => {
-    it("opens the corresponding page", () => {
-      const { getByText, container } = render(<App />)
-      
-      fireEvent.click(getByText('Map'))
-      expect(container.innerHTML).toMatch("Map component")
-      fireEvent.click(getByText('Profile'))
-      expect(container.innerHTML).toMatch("Profile component")
-      fireEvent.click(getByText('SignupForm'))
-      expect(container.innerHTML).toMatch("SignupForm component")
-    })
-  })
-})
+    const wrapper = shallow(
+      <Provider store={store}>
+        <Router>
+          <App>
+            <Child />
+          </App>
+        </Router>
+      </Provider>,
+    );
+    expect(wrapper.find(App)).toHaveProperty('children');
+    expect(wrapper.find(Child)).toHaveLength(1);
+  });
+});

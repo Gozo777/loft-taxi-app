@@ -1,19 +1,18 @@
-import { createStore, applyMiddleware } from 'redux';
-import { persistStore, persistReducer } from 'redux-persist';
-import storage from 'redux-persist/lib/storage';
-import { authMiddleware } from '../auth/authMiddlewares'
-import rootReducer from '../reducers';
+import { createStore, compose, applyMiddleware } from 'redux';
+import { rootReducer } from '../modules/Auth/reducer';
+import { authMiddleware, registerMiddleware } from '../modules/Auth/Middleware';
 
-const persistConfig = {
-  key: "root",
-  storage,
+const createAppStore = () => {
+  const store = createStore(
+    rootReducer,
+    compose(
+      applyMiddleware(authMiddleware, registerMiddleware),
+      window.__REDUX_DEVTOOLS_EXTENSION__
+        ? window.__REDUX_DEVTOOLS_EXTENSION__()
+        : (noop) => noop,
+    ),
+  );
+  return store;
 };
 
-const persistedReducer = persistReducer(persistConfig, rootReducer);
-
-export const store = createStore(
-  persistedReducer,
-  applyMiddleware(authMiddleware)
-);
-
-export const persistor = persistStore(store);
+export default createAppStore;
