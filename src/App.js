@@ -5,7 +5,6 @@ import { ThemeProvider } from "@material-ui/styles";
 import theme from "./constans/theme-customisation";
 import Header from "./components/Header ";
 import Router from "./components/Router";
-import useStyles from "./style";
 import { connect } from "react-redux";
 import {
   isAuthorized,
@@ -22,7 +21,6 @@ class App extends PureComponent {
       <div className='App'>
         <ThemeProvider theme={theme}>
           <CssBaseline />
-          {/* <div className={classes.root}> </div> */}
             <BrowserRouter>
               <Header />
               <Router />
@@ -34,7 +32,6 @@ class App extends PureComponent {
       <div className='App'>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-       {/* <div className={classes.root}>  </div>*/}
           <BrowserRouter>
             <Router />
           </BrowserRouter>
@@ -43,13 +40,6 @@ class App extends PureComponent {
     )
   };
 };
-
-/*
-const mapStateToProps = (state) => ({
-  isAuthorized: state.isAuthorized,
-});
-
-export default connect(mapStateToProps)(App); */
 
 export default connect(
   state => ({
