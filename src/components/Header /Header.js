@@ -6,7 +6,6 @@ import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import { isAuthorized, logOut } from "../../modules/Auth";
 import useStyles from "./styles";
-import settings from '../../constans/settings';
 import langs from './langs';
 import { Link } from 'react-router-dom';
 import { Logo } from 'loft-taxi-mui-theme';
