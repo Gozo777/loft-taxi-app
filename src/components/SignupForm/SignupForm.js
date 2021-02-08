@@ -1,87 +1,143 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { Redirect, Link } from 'react-router-dom';
-import { connect } from 'react-redux';
-import { makeStyles } from '@material-ui/core/styles';
-import { Container, Typography } from '@material-ui/core';
+import React, { PureComponent } from "react";
+import { connect } from "react-redux";
+import { Redirect } from "react-router-dom";
+import Grid from "@material-ui/core/Grid";
+import Card from "@material-ui/core/Card";
+import CardContent from "@material-ui/core/CardContent";
+import Typography from "@material-ui/core/Typography";
+import { withStyles } from "@material-ui/core/styles";
+import Button from "@material-ui/core/Button";
+import Box from "@material-ui/core/Box";
+import CircularProgress from "@material-ui/core/CircularProgress";
+import { Form, Field } from "react-final-form";
+import { TextField } from "final-form-material-ui";
+import validate from "./validate";
+import {
+  authRequest,
+  isAuthorized,
+  getErrors,
+  isLoading
+} from "../../modules/Auth";
+import styles from './styles';
+import langs from './langs';
+import { Link } from 'react-router-dom';
 import { Logo } from 'loft-taxi-mui-theme';
-import { signupAction } from '../../modules/Auth/actions';
-import Card from '../Card/Card';
 
-import style from './SignupForm.css';
-
-const useStyles = makeStyles({
-  container: {
-    paddingTop: '10vh',
-    maxWidth: '1000px',
-    alignItems: 'center',
-    display: 'flex',
-    textAlign: 'center',
-  justifyContent: 'center',
-  },
-  title: {
-    fontSize: '36px',
-    marginBottom: '30px',
-  },
-  subtitle: {
-    marginBottom: '30px',
-    display: 'flex',
-    textAlign: 'center',
-  justifyContent: 'center',
-  },
-});
-
-const SignupForm = (props) => {
-  const classes = useStyles();
-
-  const handleSubmit = (email, password, name, surname) => {
-    props.signup({
-      email,
-      password,
-      name,
-      surname,
-    });
+class SignupForm extends PureComponent {
+  handleSubmit = values => {
+    const { authRequest } = this.props;
+    authRequest({ login: values.login, password: values.password });
   };
 
-  return (
-    <>
-       <Logo white />
-      {props.authed ? (
-        <Redirect to="/map" />
-      ) : (
-        <div className={style.signup}>
-          <Container className={classes.container} maxWidth="md">
-            <div className={style.card}>
-              <Typography variant="h2" className={classes.title}>Регистрация</Typography>
-              <Typography variant="subtitle2" className={classes.subtitle}>
-                Уже зарегестрированы?
-                <Link className={style.link} to="/login">Войти</Link>
+  render() {
+    const { classes, isAuthorized, authError, isLoading } = this.props;
+
+    return isAuthorized ? (
+      <Redirect to="/map" />
+    ) : (
+      <Grid
+        container
+        spacing={6}
+        className={classes.gridContainer}
+        >
+          <Logo white />
+        <Grid item xs={3}>
+          <Card className={classes.cardContent}>
+            <CardContent>
+              <Typography
+                align="center"
+                gutterBottom={true}
+                variant="h4"
+                component="h1"
+              >
+                  Регистрация
               </Typography>
-              <Card handleSubmit={handleSubmit} mode="signup" />
-            </div>
-          </Container>
-        </div>
-      )}
-    </>
-  );
-};
+              <Typography variant="subtitle2" >
+                Уже зарегистрированы?
+                     <br/>
+                  <Link to="/login">Войти</Link>
+                  </Typography>
+              <Form
+                onSubmit={this.handleSubmit}
+                validate={validate}
+                render={({ handleSubmit, values }) => (
+                  <form onSubmit={handleSubmit}>
+                    <Field
+                      component={TextField}
+                      name="login"
+                      required
+                      label={langs.labels.login}
+                      margin="normal"
+                      placeholder={langs.placeholders.login}
+                      fullWidth={true}
+                    />
+                     <Field
+                      component={TextField}
+                      name="name"
+                      required
+                      label={langs.labels.name}
+                      margin="normal"
+                      placeholder={langs.placeholders.name}
+                      fullWidth={true}
+                    />
+                    <Field
+                      component={TextField}
+                      name="secondname"
+                      required
+                      label={langs.labels.secondname}
+                      margin="normal"
+                      placeholder={langs.placeholders.secondname}
+                      fullWidth={true}
+                    />
+                    <Field
+                      component={TextField}
+                      name="password"
+                      required
+                      type="password"
+                      label={langs.labels.password}
+                      margin="normal"
+                      placeholder={langs.placeholders.password}
+                      fullWidth={true}
+                    />
+                    {authError && (
+                      <Box mt={2}>
+                        <Typography color="error" variant="body2">
+                          {authError}
+                        </Typography>
+                      </Box>
+                    )}
+                    <Box mt={2} className={classes.wrapper}>
+                      <Button
+                        disabled={isLoading}
+                        type="submit"
+                        variant="outlined"
+                        color="primary"
+                      >
+                        {langs.labels.submit}
+                      </Button>
+                      {isLoading && (
+                        <CircularProgress
+                          size={24}
+                          className={classes.buttonProgress}
+                        />
+                      )}
+                    </Box>
+                  </form>
+                )}
+              />
+            </CardContent>
+          </Card>
+        </Grid>
+      </Grid>
+    );
+  }
+}
 
-SignupForm.propTypes = {
-  authed: PropTypes.bool,
-  signup: PropTypes.func,
-};
-
-SignupForm.defaultProps = {
-  authed: false,
-  signup: () => {},
-};
-
-const mapStateToProps = (state) => ({
-  authed: state.authed,
-});
-
-const mapDispathToProps = (dispatch) => ({
-  signup: (user) => dispatch(signupAction(user)),
-});
-
-export default connect(mapStateToProps, mapDispathToProps)(SignupForm);
+export default connect(
+  state => ({
+    isAuthorized: isAuthorized(state),
+    authError: getErrors(state),
+    isLoading: isLoading(state)
+  }),
+  { authRequest }
+)(withStyles(styles)(SignupForm));

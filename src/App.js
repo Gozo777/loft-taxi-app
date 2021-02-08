@@ -1,43 +1,59 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
-import Header from './components/Header/Header';
-import SignupForm from './components/SignupForm/SignupForm';
-import LoginForm from './components/LoginForm/LoginForm';
-import Map from './components/Map/Map';
-import Profile from './components/Profile/Profile';
-import { PrivateRoute } from './PrivateRoute/PrivateRoute';
-import './App.css';
+import React, { PureComponent } from "react";
+import { BrowserRouter } from "react-router-dom";
+import CssBaseline from "@material-ui/core/CssBaseline";
+import { ThemeProvider } from "@material-ui/styles";
+import theme from "./constans/theme-customisation";
+import Header from "./components/Header ";
+import Router from "./components/Router";
+import useStyles from "./style";
+import { connect } from "react-redux";
+import {
+  isAuthorized,
+  authRequest
+} from "./modules/Auth";
 
-const routes = ['map', 'profile', 'logout'];
+class App extends PureComponent {
 
-const App = ({ authed }) => (
-  <div className='App'>
-  <BrowserRouter>
-    {authed && <Header routes={routes} />}
-    <Switch>
-      <Route path="/login" component={LoginForm} />
-      <Route path="/signup" component={SignupForm} />
-      <PrivateRoute path="/profile" component={Profile} authed={authed} />
-      <PrivateRoute path="/" component={Map} authed={authed} />
-      <Route path="*" component={LoginForm} />
-      <Redirect to="/" />
-    </Switch>
-    </BrowserRouter>
+  render() {
+
+    const { isAuthorized } = this.props;
+
+    return isAuthorized ? (
+      <div className='App'>
+        <ThemeProvider theme={theme}>
+          <CssBaseline />
+          {/* <div className={classes.root}> </div> */}
+            <BrowserRouter>
+              <Header />
+              <Router />
+            </BrowserRouter>
+          
+        </ThemeProvider>
+      </div>
+    ) : (
+      <div className='App'>
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+       {/* <div className={classes.root}>  </div>*/}
+          <BrowserRouter>
+            <Router />
+          </BrowserRouter>
+      </ThemeProvider>
     </div>
-);
-
-App.propTypes = {
-  authed: PropTypes.bool,
+    )
+  };
 };
 
-App.defaultProps = {
-  authed: false,
-};
-
+/*
 const mapStateToProps = (state) => ({
-  authed: state.authed,
+  isAuthorized: state.isAuthorized,
 });
 
-export default connect(mapStateToProps)(App);
+export default connect(mapStateToProps)(App); */
+
+export default connect(
+  state => ({
+    isAuthorized: isAuthorized(state),
+  }),
+  { authRequest }
+)(App);

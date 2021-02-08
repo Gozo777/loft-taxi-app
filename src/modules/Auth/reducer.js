@@ -1,58 +1,31 @@
-import { loginAction, failureAction, signupAction, logoutAction } from './actions';
+import { combineReducers } from "redux";
+import { handleActions } from "redux-actions";
+import { authRequest, authSuccess, authFailure, logOut } from "./actions";
 
-export const INIT_STATE = {
-  authed: !!localStorage.getItem('user'),
-  user: {
-    email: localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')).email : '',
-    password: localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')).info : '',
-    name: '',
-    surname: '',
+const isAuthorized = handleActions(
+  {
+    [authSuccess]: () => true,
+    [logOut]: () => false
   },
-  card: {
-    number: '',
-    name: '',
-    date: '',
-    cvc: '',
+  false
+);
+
+const isLoading = handleActions(
+  {
+    [authRequest]: () => true,
+    [authSuccess]: () => false,
+    [authFailure]: () => false
   },
-  error: false,
-};
+  false
+);
 
-export const rootReducer = (state = INIT_STATE, action) => {
-  switch (action.type) {
-    case loginAction.toString():
-      return { ...state,
-        authed: true,
-        user: {
-          email: action.payload.email,
-          password: action.payload.password,
-        },
-      };
-      case signupAction.toString():
-        return { ...state,
-          authed: true,
-          user: {
-            email: action.payload.email,
-            password: action.payload.password,
-            name: action.payload.name,
-            surname: action.payload.surname,
-          },
-        };
-    case logoutAction.toString():
-      return { ...state,
-        authed: false,
-        user: {
-          email: '',
-          password: '',
-        },
-      };
-    case failureAction.toString():
-      return { ...state,
-        error: true,
-        errorMessage: action.payload,
-      };
-    default:
-      return state;
-  }
-};
+const authError = handleActions(
+  {
+    [authRequest]: () => "",
+    [authFailure]: (_state, action) => action.payload,
+    [authSuccess]: () => ""
+  },
+  ""
+);
 
-export default rootReducer;
+export default combineReducers({ isAuthorized, isLoading, authError });

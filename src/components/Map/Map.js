@@ -1,50 +1,89 @@
-import React, { useRef, useEffect, useState } from 'react';
-import mapboxgl from 'mapbox-gl';
-import './Map.css';
+import React, { PureComponent } from "react";
+import { connect } from "react-redux";
+import Box from "@material-ui/core/Box";
+import { withStyles } from "@material-ui/core/styles";
+import Paper from "@material-ui/core/Paper";
+import mapboxgl from "mapbox-gl";
+import { isProfileFilled } from "../../modules/Profile";
+import { getCords } from "../../modules/Order";
+import { Link } from "react-router-dom";
+import styles from "./styles";
+import settings from "../../constans/settings";
+import langs from "./langs";
 
-mapboxgl.accessToken =
-  'pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4M29iazA2Z2gycXA4N2pmbDZmangifQ.-g_vE53SD2WrJ6tFX7QHmA';
+class Map extends PureComponent {
+  map = null;
+  mapContainer = React.createRef();
 
-const Map = () => {
-
-  const mapContainerRef = useRef(null);
-
-  const [lng, setLng] = useState(5);
-  const [lat, setLat] = useState(34);
-  const [zoom, setZoom] = useState(1.5);
-
-  // Initialize map when component mounts
-  useEffect(() => {
-    const map = new mapboxgl.Map({
-      container: mapContainerRef.current,
-      style: 'mapbox://styles/mapbox/streets-v11',
-      center: [lng, lat],
-      zoom: zoom
+  componentDidMount() {
+    mapboxgl.accessToken = settings.map.API_KEY;
+    this.map = new mapboxgl.Map({
+      container: this.mapContainer.current,
+      style: settings.map.style,
+      center: settings.map.defCenter,
+      zoom: settings.map.defZoom
     });
+  }
 
-    // Add navigation control (the +/- zoom buttons)
-    map.addControl(new mapboxgl.NavigationControl(), 'top-right');
+  componentWillUnmount() {
+    this.map.remove();
+  }
 
-    map.on('move', () => {
-      setLng(map.getCenter().lng.toFixed(4));
-      setLat(map.getCenter().lat.toFixed(4));
-      setZoom(map.getZoom().toFixed(2));
+  clearMap = () => {
+    const mapLayer = this.map.getLayer("route");
+
+    if (mapLayer) {
+      this.map.removeLayer("route");
+      this.map.removeSource("route");
+    }
+  };
+
+  updateMap = cords => {
+    this.clearMap();
+
+    this.map.addLayer({
+      id: "route",
+      type: "line",
+      source: {
+        type: "geojson",
+        data: {
+          type: "Feature",
+          properties: {},
+          geometry: {
+            type: "LineString",
+            coordinates: cords
+          }
+        }
+      },
+      layout: {
+        "line-join": "round",
+        "line-cap": "round"
+      },
+      paint: {
+        "line-color": settings.map.lineColor,
+        "line-width": settings.map.lineWidth
+      }
     });
+    this.map.flyTo({ center: cords[0], zoom: settings.map.defZoom });
+  };
 
-    // Clean up on unmount
-    return () => map.remove();
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  render() {
+    const { classes, isProfileFilled } = this.props;
 
-  return (
-    <div>
-      <div className='map-wrapper'>
-        <div>
-          Longitude: {lng} | Latitude: {lat} | Zoom: {zoom}
-        </div>
-      </div>
-      <div className='map' ref={mapContainerRef} />
-    </div>
-  );
-};
+    return (
+      <Box position="relative" zIndex="-10">
+        <Box className={classes.map} ref={this.mapContainer} />
+        <Box className={classes.content}>
+          {!isProfileFilled}
+        </Box>
+      </Box>
+    );
+  }
+}
 
-export default Map;
+export default connect(
+  state => ({
+    isProfileFilled: isProfileFilled(state),
+  }),
+  {}
+)(withStyles(styles)(Map));
